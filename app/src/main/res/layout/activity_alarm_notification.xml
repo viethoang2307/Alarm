@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="#1A1A1A"
+    android:padding="32dp">
+
+    <!-- Alarm Icon -->
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/ic_alarm"
+        android:tint="#FF6B35"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Alarm Title -->
+    <TextView
+        android:id="@+id/titleText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Báo thức"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:gravity="center"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Alarm Time -->
+    <TextView
+        android:id="@+id/timeText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="07:30"
+        android:textSize="48sp"
+        android:textStyle="bold"
+        android:textColor="#FF6B35"
+        android:gravity="center"
+        android:layout_marginBottom="48dp"
+        android:fontFamily="monospace" />
+
+    <!-- Action Buttons Container -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+
+        <!-- Dismiss Button -->
+        <Button
+            android:id="@+id/dismissButton"
+            android:layout_width="280dp"
+            android:layout_height="64dp"
+            android:text="⏹️ Tắt báo thức"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/alarm_button_background"
+            android:backgroundTint="#E53E3E"
+            android:layout_marginBottom="16dp"
+            android:elevation="4dp" />
+
+        <!-- Snooze Button -->
+        <Button
+            android:id="@+id/snoozeButton"
+            android:layout_width="280dp"
+            android:layout_height="64dp"
+            android:text="😴 Báo lại sau 5 phút"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/alarm_button_background"
+            android:backgroundTint="#3182CE"
+            android:elevation="4dp" />
+
+    </LinearLayout>
+
+    <!-- Instructions -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn một tùy chọn để tiếp tục"
+        android:textSize="14sp"
+        android:textColor="#CCCCCC"
+        android:gravity="center"
+        android:layout_marginTop="32dp" />
+
+</LinearLayout>

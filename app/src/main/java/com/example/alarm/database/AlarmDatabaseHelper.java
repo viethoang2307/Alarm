@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class AlarmDatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME = "alarm_db";
-    private static final int DB_VERSION = 1;
+    private static final int DB_VERSION = 2; // Updated version for new fields
     private static final String TABLE_NAME = "alarms";
 
     public AlarmDatabaseHelper(Context context) {
@@ -39,32 +39,54 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
                 "ignore_after INTEGER," +
                 "math_dismiss INTEGER," +
                 "auto_snooze INTEGER," +
-                "auto_dismiss INTEGER" +
+                "auto_dismiss INTEGER," +
+                "favorite_music TEXT," +
+                "vibrate INTEGER," +
+                "math_difficulty INTEGER," +
+                "upcoming_notification INTEGER," +
+                "upcoming_notification_minutes INTEGER," +
+                "gradual_volume INTEGER," +
+                "snooze_count INTEGER," +
+                "max_snooze_count INTEGER" +
                 ")";
         db.execSQL(sql);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldV, int newV) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
-        onCreate(db);
+        if (oldV < 2) {
+            // Add new columns for version 2
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN favorite_music TEXT");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN vibrate INTEGER DEFAULT 1");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN math_difficulty INTEGER DEFAULT 1");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN upcoming_notification INTEGER DEFAULT 1");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN upcoming_notification_minutes INTEGER DEFAULT 15");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN gradual_volume INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN snooze_count INTEGER DEFAULT 0");
+            db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN max_snooze_count INTEGER DEFAULT 3");
+        }
     }
 
-    public void insertAlarm(Alarm alarm) {
+    public long insertAlarm(Alarm alarm) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = toValues(alarm);
-        db.insert(TABLE_NAME, null, values);
+        long id = db.insert(TABLE_NAME, null, values);
+        db.close();
+        return id;
     }
 
     public void updateAlarm(Alarm alarm) {
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = toValues(alarm);
-        db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(alarm.getId())});
+        int rowsAffected = db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(alarm.getId())});
+        db.close();
     }
 
     public void deleteAlarm(int id) {
         SQLiteDatabase db = getWritableDatabase();
-        db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+        int rows = db.delete(TABLE_NAME, "id = ?", new String[]{String.valueOf(id)});
+        db.close();
+        android.util.Log.d("AlarmDB", "Deleted rows: " + rows);
     }
 
     public ArrayList<Alarm> getAllAlarms() {
@@ -79,7 +101,8 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
             alarm.setLabel(cursor.getString(cursor.getColumnIndexOrThrow("label")));
             alarm.setEnabled(cursor.getInt(cursor.getColumnIndexOrThrow("enabled")) == 1);
             alarm.setRepeatDays(parseRepeatDays(cursor.getString(cursor.getColumnIndexOrThrow("repeat_days"))));
-            alarm.setRingtonePath(cursor.getString(cursor.getColumnIndexOrThrow("ringtone")));
+            String ringtonePath = cursor.getString(cursor.getColumnIndexOrThrow("ringtone"));
+            alarm.setRingtonePath(ringtonePath);
             alarm.setRandomMusic(cursor.getInt(cursor.getColumnIndexOrThrow("random_music")) == 1);
             alarm.setVolume(cursor.getInt(cursor.getColumnIndexOrThrow("volume")));
             alarm.setLoop(cursor.getInt(cursor.getColumnIndexOrThrow("loop")) == 1);
@@ -87,9 +110,24 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
             alarm.setRequireMathToDismiss(cursor.getInt(cursor.getColumnIndexOrThrow("math_dismiss")) == 1);
             alarm.setAutoSnoozeMinutes(cursor.getInt(cursor.getColumnIndexOrThrow("auto_snooze")));
             alarm.setAutoDismissMinutes(cursor.getInt(cursor.getColumnIndexOrThrow("auto_dismiss")));
+
+            // Handle new fields with null checks for backward compatibility
+            int favoriteIndex = cursor.getColumnIndex("favorite_music");
+            if (favoriteIndex != -1) {
+                alarm.setFavoriteMusicPath(cursor.getString(favoriteIndex));
+                alarm.setVibrate(cursor.getInt(cursor.getColumnIndexOrThrow("vibrate")) == 1);
+                alarm.setMathDifficulty(cursor.getInt(cursor.getColumnIndexOrThrow("math_difficulty")));
+                alarm.setShowUpcomingNotification(cursor.getInt(cursor.getColumnIndexOrThrow("upcoming_notification")) == 1);
+                alarm.setUpcomingNotificationMinutes(cursor.getInt(cursor.getColumnIndexOrThrow("upcoming_notification_minutes")));
+                alarm.setGradualVolumeIncrease(cursor.getInt(cursor.getColumnIndexOrThrow("gradual_volume")) == 1);
+                alarm.setSnoozeCount(cursor.getInt(cursor.getColumnIndexOrThrow("snooze_count")));
+                alarm.setMaxSnoozeCount(cursor.getInt(cursor.getColumnIndexOrThrow("max_snooze_count")));
+            }
+
             list.add(alarm);
         }
         cursor.close();
+        db.close();
         return list;
     }
 
@@ -104,7 +142,8 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
             alarm.setLabel(cursor.getString(cursor.getColumnIndexOrThrow("label")));
             alarm.setEnabled(cursor.getInt(cursor.getColumnIndexOrThrow("enabled")) == 1);
             alarm.setRepeatDays(parseRepeatDays(cursor.getString(cursor.getColumnIndexOrThrow("repeat_days"))));
-            alarm.setRingtonePath(cursor.getString(cursor.getColumnIndexOrThrow("ringtone")));
+            String ringtonePath = cursor.getString(cursor.getColumnIndexOrThrow("ringtone"));
+            alarm.setRingtonePath(ringtonePath);
             alarm.setRandomMusic(cursor.getInt(cursor.getColumnIndexOrThrow("random_music")) == 1);
             alarm.setVolume(cursor.getInt(cursor.getColumnIndexOrThrow("volume")));
             alarm.setLoop(cursor.getInt(cursor.getColumnIndexOrThrow("loop")) == 1);
@@ -112,10 +151,26 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
             alarm.setRequireMathToDismiss(cursor.getInt(cursor.getColumnIndexOrThrow("math_dismiss")) == 1);
             alarm.setAutoSnoozeMinutes(cursor.getInt(cursor.getColumnIndexOrThrow("auto_snooze")));
             alarm.setAutoDismissMinutes(cursor.getInt(cursor.getColumnIndexOrThrow("auto_dismiss")));
+
+            // Handle new fields with null checks for backward compatibility
+            int favoriteIndex = cursor.getColumnIndex("favorite_music");
+            if (favoriteIndex != -1) {
+                alarm.setFavoriteMusicPath(cursor.getString(favoriteIndex));
+                alarm.setVibrate(cursor.getInt(cursor.getColumnIndexOrThrow("vibrate")) == 1);
+                alarm.setMathDifficulty(cursor.getInt(cursor.getColumnIndexOrThrow("math_difficulty")));
+                alarm.setShowUpcomingNotification(cursor.getInt(cursor.getColumnIndexOrThrow("upcoming_notification")) == 1);
+                alarm.setUpcomingNotificationMinutes(cursor.getInt(cursor.getColumnIndexOrThrow("upcoming_notification_minutes")));
+                alarm.setGradualVolumeIncrease(cursor.getInt(cursor.getColumnIndexOrThrow("gradual_volume")) == 1);
+                alarm.setSnoozeCount(cursor.getInt(cursor.getColumnIndexOrThrow("snooze_count")));
+                alarm.setMaxSnoozeCount(cursor.getInt(cursor.getColumnIndexOrThrow("max_snooze_count")));
+            }
+
             cursor.close();
+            db.close();
             return alarm;
         }
         cursor.close();
+        db.close();
         return null;
     }
 
@@ -134,6 +189,17 @@ public class AlarmDatabaseHelper extends SQLiteOpenHelper {
         values.put("math_dismiss", alarm.isRequireMathToDismiss() ? 1 : 0);
         values.put("auto_snooze", alarm.getAutoSnoozeMinutes());
         values.put("auto_dismiss", alarm.getAutoDismissMinutes());
+
+        // Add new fields
+        values.put("favorite_music", alarm.getFavoriteMusicPath());
+        values.put("vibrate", alarm.isVibrate() ? 1 : 0);
+        values.put("math_difficulty", alarm.getMathDifficulty());
+        values.put("upcoming_notification", alarm.isShowUpcomingNotification() ? 1 : 0);
+        values.put("upcoming_notification_minutes", alarm.getUpcomingNotificationMinutes());
+        values.put("gradual_volume", alarm.isGradualVolumeIncrease() ? 1 : 0);
+        values.put("snooze_count", alarm.getSnoozeCount());
+        values.put("max_snooze_count", alarm.getMaxSnoozeCount());
+
         return values;
     }
 

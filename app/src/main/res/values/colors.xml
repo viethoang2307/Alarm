@@ -17,6 +17,11 @@
     <color name="teal_200">#03DAC5</color>
     <color name="teal_700">#018786</color>
 
+    <!-- Alarm colors -->
+    <color name="red">#E53E3E</color>
+    <color name="orange">#FF8C00</color>
+    <color name="blue">#3182CE</color>
+
 
 
 </resources>

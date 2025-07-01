@@ -1,28 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/alarmListView"
+    <!-- Main Content Area -->
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/addAlarmButton"
-        android:dividerHeight="8dp"
-        android:paddingBottom="72dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#FAFAFA"
+        android:padding="16dp">
 
-    <ImageButton
-        android:id="@+id/addAlarmButton"
-        android:layout_width="63dp"
-        android:layout_height="59dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="32dp"
-        android:background="@drawable/fab_background"
-        android:contentDescription="Thêm báo thức"
+        <ListView
+            android:id="@+id/alarmListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/fabContainer"
+            android:dividerHeight="8dp"
+            android:paddingBottom="16dp" />
 
-        android:elevation="6dp"
-        android:src="@drawable/ic_add" />
-</RelativeLayout>
+        <!-- FAB Container -->
+        <LinearLayout
+            android:id="@+id/fabContainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="16dp"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/testNotificationButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/fab_background"
+                android:contentDescription="Test Notification"
+                android:elevation="6dp"
+                android:src="@drawable/ic_notifications" />
+
+            <ImageButton
+                android:id="@+id/quickAlarmButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_marginRight="16dp"
+                android:background="@drawable/fab_background"
+                android:contentDescription="Báo thức nhanh"
+                android:elevation="6dp"
+                android:src="@drawable/ic_alarm_add" />
+
+            <ImageButton
+                android:id="@+id/addAlarmButton"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:background="@drawable/fab_background"
+                android:contentDescription="Thêm báo thức"
+                android:elevation="6dp"
+                android:src="@drawable/ic_add" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/BottomNavigationStyle"
+        android:elevation="8dp"
+        app:itemIconTint="@color/bottom_nav_color"
+        app:itemTextColor="@color/bottom_nav_color"
+        app:menu="@menu/bottom_navigation_menu" />
+</LinearLayout>

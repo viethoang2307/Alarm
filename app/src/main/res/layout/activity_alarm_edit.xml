@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
@@ -79,11 +80,37 @@
             android:layout_marginBottom="12dp" />
 
         <!-- Nhạc chuông -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Âm thanh báo thức:"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
         <Button
             android:id="@+id/ringtoneButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Chọn nhạc chuông" />
+            android:text="Chọn nhạc chuông"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/favoriteMusicButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chọn nhạc yêu thích"
+            android:layout_marginTop="4dp" />
+
+        <TextView
+            android:id="@+id/selectedMusicText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Chưa chọn nhạc"
+            android:textSize="12sp"
+            android:textColor="#666666"
+            android:padding="8dp"
+            android:background="#F0F0F0"
+            android:layout_marginTop="4dp" />
 
         <!-- Switch tùy chọn -->
         <Switch
@@ -110,6 +137,81 @@
             android:layout_height="wrap_content"
             android:text="Yêu cầu giải toán để tắt" />
 
+        <Switch
+            android:id="@+id/vibrateSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Rung khi báo thức" />
+
+        <Switch
+            android:id="@+id/gradualVolumeSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tăng âm lượng dần" />
+
+        <Switch
+            android:id="@+id/upcomingNotificationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Thông báo trước khi báo thức" />
+
+        <!-- Math Difficulty -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Độ khó toán học:"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <Spinner
+            android:id="@+id/mathDifficultySpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp" />
+
+        <!-- Auto Snooze/Dismiss Settings -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tự động báo lại sau (phút):"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp" />
+
+        <SeekBar
+            android:id="@+id/autoSnoozeSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="30"
+            android:progress="5" />
+
+        <TextView
+            android:id="@+id/autoSnoozeText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="5 phút"
+            android:textColor="#555555" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tự động tắt sau (phút):"
+            android:textStyle="bold"
+            android:layout_marginTop="12dp" />
+
+        <SeekBar
+            android:id="@+id/autoDismissSeekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="60"
+            android:progress="10" />
+
+        <TextView
+            android:id="@+id/autoDismissText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 phút"
+            android:textColor="#555555" />
+
         <!-- Nút lưu -->
         <Button
             android:id="@+id/saveButton"
@@ -120,6 +222,14 @@
             android:backgroundTint="#3F51B5"
             android:textColor="#FFFFFF"
             android:textStyle="bold"/>
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="?android:attr/windowBackground"
+            app:menu="@menu/bottom_nav_menu" />
 
     </LinearLayout>
 </ScrollView>
