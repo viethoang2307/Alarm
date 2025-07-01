@@ -38,7 +38,7 @@
         <activity android:name=".activity.MusicSelectionActivity" android:exported="false"/>
         <activity android:name=".activity.TimerActivity" />
         <activity android:name=".activity.StopwatchActivity" />
-        <activity android:name=".activity.NotificationTestActivity" android:exported="true" />
+
         <activity
             android:name=".activity.AlarmNotificationActivity"
             android:exported="false"

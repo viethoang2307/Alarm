@@ -23,7 +23,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.alarm.activity.BaseActivity;
 import com.example.alarm.activity.AlarmEditActivity;
-import com.example.alarm.activity.NotificationTestActivity;
 import com.example.alarm.activity.StopwatchActivity;
 import com.example.alarm.activity.TimerActivity;
 import com.example.alarm.adapter.AlarmListAdapter;
@@ -38,7 +37,7 @@ import java.util.ArrayList;
 public class MainActivity extends BaseActivity implements AlarmListAdapter.OnAlarmActionListener {
 
     private ListView alarmListView;
-    private ImageButton addAlarmButton, quickAlarmButton, testNotificationButton;
+    private ImageButton addAlarmButton, quickAlarmButton;
     private AlarmListAdapter adapter;
     private AlarmDatabaseHelper dbHelper;
     private ArrayList<Alarm> alarmList;
@@ -51,7 +50,6 @@ public class MainActivity extends BaseActivity implements AlarmListAdapter.OnAla
         alarmListView = findViewById(R.id.alarmListView);
         addAlarmButton = findViewById(R.id.addAlarmButton);
         quickAlarmButton = findViewById(R.id.quickAlarmButton);
-        testNotificationButton = findViewById(R.id.testNotificationButton);
 
         dbHelper = new AlarmDatabaseHelper(this);
         alarmList = dbHelper.getAllAlarms();
@@ -65,11 +63,6 @@ public class MainActivity extends BaseActivity implements AlarmListAdapter.OnAla
         });
 
         quickAlarmButton.setOnClickListener(v -> showQuickAlarmDialog());
-
-        testNotificationButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, NotificationTestActivity.class);
-            startActivity(intent);
-        });
 
         alarmListView.setOnItemClickListener((parent, view, position, id) -> {
             Alarm alarm = alarmList.get(position);

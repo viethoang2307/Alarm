@@ -32,16 +32,6 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/testNotificationButton"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginRight="12dp"
-                android:background="@drawable/fab_background"
-                android:contentDescription="Test Notification"
-                android:elevation="6dp"
-                android:src="@drawable/ic_notifications" />
-
-            <ImageButton
                 android:id="@+id/quickAlarmButton"
                 android:layout_width="56dp"
                 android:layout_height="56dp"

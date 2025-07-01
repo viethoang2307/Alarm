@@ -27,7 +27,6 @@ import com.example.alarm.activity.MathChallengeActivity;
 import com.example.alarm.activity.StopAlarmActivity;
 import com.example.alarm.model.Alarm;
 import com.example.alarm.receiver.AlarmActionReceiver;
-import com.example.alarm.utils.NotificationHelper;
 
 import java.io.IOException;
 
@@ -128,12 +127,6 @@ public class AlarmService extends Service {
 
     private void showAlarmNotification() {
         Log.d(TAG, "Creating alarm notification");
-
-        // Check notification permissions
-        NotificationHelper.logNotificationStatus(this);
-        if (!NotificationHelper.areNotificationsEnabled(this)) {
-            Log.e(TAG, "Notifications are disabled for this app!");
-        }
 
         createNotificationChannel();
 
